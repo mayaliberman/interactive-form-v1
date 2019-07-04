@@ -169,39 +169,84 @@ $(document).ready(() => {
   });
 
   function isValidInputName(name) {
-    const nameRegex = /[A-Z][a-zA-Z][^#&<>\"~;$^%{}?]{1,25}$/;
-    if(!nameRegex.test(name) || name === '') {
-      $('#name').addClass('error').css('border-color', 'red');
-      console.log('false')
-     
+    const nameRegex = /^[a-z][a-z '-.,]{0,31}$|^$/i;
+    if (!nameRegex.test(name) || $('#name').val() === '') {
+      $('#name').css('border-color', 'red');
     } else {
-      $('#name').removeClass('error');
-      console.log('true')
-      
+      $('#name').css('border-color', '#b0d3e2');
     }
-    
-  };
-
-  $('#name').on('input', isValidInputName());
-
-
+  }
 
   function isValidEmail(email) {
     const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    return emailRegex.test(email);
+    if (!emailRegex.test(email) || $('#mail').val() === '') {
+      $('#mail').css('border-color', 'red');
+    } else {
+      $('#mail').css('border-color', '#b0d3e2');
+    }
   }
+
+  function isActivitiesChecked(checkbox) {
+    if (
+      !$(checkbox)
+        .each()
+        .getAttribute('checked')
+    ) {
+      $(checkbox).parent().css('color', 'red');
+    } else {
+      $(this).css('color', 'black');
+    }
+  }
+  isActivitiesChecked($('input [type="checkbox"]'))
+
+  // $('.activities').on('mouseover', event =>
+  //   isActivitiesChecked(event.target.value)
+  // );
+
   function isValidCreditCard(number) {
     const creditNumRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-    return creditNumRegex.test(number);
+    if (
+      $('#credit-card').show() &&
+      (!creditNumRegex.test(number) || $('#cc-num').val() === '')
+    ) {
+      $('#cc-num').css('border-color', 'red');
+    } else {
+      $('#cc-num').css('border-color', '#b0d3e2');
+    }
   }
 
   function isValidZip(num) {
     const zipRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
-    return zipRegex.test(num);
+    if (
+      $('#credit-card').show() &&
+      (!zipRegex.test(num) || $('#zip').val() === '')
+    ) {
+      $('#zip').css('border-color', 'red');
+    } else {
+      $('#zip').css('border-color', '#b0d3e2');
+    }
   }
 
   function isValidCVV(num) {
     const CVVRegex = /^[0-9]{3,4}$/;
-    return CVVRegex.test(num);
+    if (
+      $('#credit-card').show() &&
+      (!CVVRegex.test(num) || $('#cvv').val() === '')
+    ) {
+      $('#cvv').css('border-color', 'red');
+    } else {
+      $('#cvv').css('border-color', '#b0d3e2');
+    }
   }
+
+  $('#name').on('input', event => isValidInputName(event.target.value));
+  $('#name').on('focusout', event => isValidInputName(event.target.value));
+  $('#mail').on('input', event => isValidEmail(event.target.value));
+  $('#mail').on('focusout', event => isValidEmail(event.target.value));
+  $('#cc-num').on('input', event => isValidCreditCard(event.target.value));
+  $('#cc-num').on('focusout', event => isValidCreditCard(event.target.value));
+  $('#cvv').on('input', event => isValidCVV(event.target.value));
+  $('#cvv').on('focusout', event => isValidCVV(event.target.value));
+  $('#zip').on('input', event => isValidZip(event.target.value));
+  $('#zip').on('focusout', event => isValidZip(event.target.value));
 });
