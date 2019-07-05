@@ -88,10 +88,10 @@ $(document).ready(() => {
     //when the checkbox is checked or uncheckced the total price is being updated
     if ($($inputCheckbox).prop('checked')) {
       totalCost += price;
-      $totalActivityCost.text('Total Cost: $' + totalCost);
+      $totalActivityCost.text('Total Cost: $' + totalCost).show();
     } else if (!$($inputCheckbox).prop('checked')) {
       totalCost -= price;
-      $totalActivityCost.text('Total Cost: $' + totalCost);
+      $totalActivityCost.text('Total Cost: $' + totalCost).show();
     }
     //creating variables to check the similarity between checked input labels and other labales
     const dashSign = '—';
@@ -195,20 +195,20 @@ $(document).ready(() => {
     }
   }
 
-  function isActivitiesChecked(event) {
-    if ($('.activities:checkbox:checked').length === 0) {
+  function isActivitiesChecked(activity) {
+    if (totalCost === 0) {
       $('.activities > legend').css('color', 'red');
-        console.log(false)
-        return false
-    } else if ($('.activities:checkbox:checked').length > 0) {
+      console.log('activities false')
+      return false;
+    } else{
       $('.activities > legend').css('color', 'black');
-        console.log(true)
-        return true;
+      console.log('activities true')
+      return true;
     }
-    event.preventDefault();
+   
   }
 
-  $('.activities input').on('change', event => isActivitiesChecked(event.target.value));
+  // $('.activities input').on('change', event => isActivitiesChecked(event.target.value));
   
 
   function isValidCreditCard(number) {
@@ -219,10 +219,12 @@ $(document).ready(() => {
     ) {
       $('#cc-num').css('border-color', 'red');
       $('label[for="cc-num"]').css('color', 'red');
+      console.log('credit num false')
       return false;
     } else {
       $('#cc-num').css('border-color', '#b0d3e2');
       $('label[for="cc-num"]').css('color', 'black');
+      console.log('activities true')
       return true;
     }
   }
@@ -235,10 +237,12 @@ $(document).ready(() => {
     ) {
       $('#zip').css('border-color', 'red');
       $('label[for="zip"]').css('color', 'red');
+      console.log('zip false')
       return false;
     } else {
       $('#zip').css('border-color', '#b0d3e2');
       $('label[for="zip"]').css('color', 'black');
+      console.log('zip true')
       return true;
     }
   }
@@ -251,10 +255,12 @@ $(document).ready(() => {
     ) {
       $('#cvv').css('border-color', 'red');
       $('label[for="cvv"]').css('color', 'red');
+      console.log('cvv false')
       return false;
     } else {
       $('#cvv').css('border-color', '#b0d3e2');
       $('label[for="cvv"]').css('color', 'black');
+      console.log('cvv true')
       return true;
     }
   }
@@ -268,7 +274,32 @@ $(document).ready(() => {
   $('#cvv').on('focusout', event => isValidCVV(event.target.value));
   $('#zip').on('input', event => isValidZip(event.target.value)); 
   $('#zip').on('focusout', event => isValidZip(event.target.value));
-  
 
+  function generalValidation() {
+    
+    if(isValidInputName() === true) {
+      console.log('name is true')
+      
+    } 
+    if(isValidEmail() === true) {
+      console.log('email is true')
+    }
+    if(isActivitiesChecked() === true) {
+      console.log('activities is true')
+    } 
+    if(isValidCreditCard() === true) {
+      console.log('credit num is true')
+    }
+    if(isValidCVV() === true) {
+      console.log('cvv is true')
+    }
+    if(isValidZip() === true){
+      console.log('zip is true')
+    }
+     
+  }
+
+  $('form').on('submit', generalValidation)
+  
  
 });
