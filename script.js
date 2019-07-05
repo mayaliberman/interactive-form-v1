@@ -187,10 +187,12 @@ $(document).ready(() => {
     if (!emailRegex.test(email) || $('#mail').val() === '') {
       $('#mail').css('border-color', 'red');
       $('label[for="mail"]').css('color', 'red');
+      console.log('false email')
       return false;
     } else {
       $('#mail').css('border-color', '#b0d3e2');
       $('label[for="mail"]').css('color', 'black');
+      console.log('true email')
       return true;
     }
   }
@@ -277,25 +279,20 @@ $(document).ready(() => {
 
   function generalValidation() {
     
-    if(isValidInputName() === true) {
-      console.log('name is true')
-      
-    } 
-    if(isValidEmail() === true) {
-      console.log('email is true')
+    if(isValidInputName() === true &&
+    isValidEmail() === true &&
+    isActivitiesChecked() === true &&
+    isValidCreditCard() === true &&
+    isValidCVV() === true &&
+    isValidZip() === true) {
+     console.log(true)
+      return true
+    } else {
+      console.log(false)
+      return false
     }
-    if(isActivitiesChecked() === true) {
-      console.log('activities is true')
-    } 
-    if(isValidCreditCard() === true) {
-      console.log('credit num is true')
-    }
-    if(isValidCVV() === true) {
-      console.log('cvv is true')
-    }
-    if(isValidZip() === true){
-      console.log('zip is true')
-    }
+    
+    
      
   }
 
