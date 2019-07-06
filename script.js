@@ -171,9 +171,8 @@ $(document).ready(() => {
   function isValidInputName(name) {
     const nameRegex = /^[a-z][a-z '-.,]{0,31}$|^$/i;
     if (!nameRegex.test(name) || $('#name').val() === '') {
-      $('#name').css('border-color', 'red')
+      $('#name').css('border-color', 'red');
       $('label[for="name"]').css('color', 'red');
-     
       return false;
     } else {
       $('#name').css('border-color', '#b0d3e2');
@@ -187,12 +186,12 @@ $(document).ready(() => {
     if (!emailRegex.test(email) || $('#mail').val() === '') {
       $('#mail').css('border-color', 'red');
       $('label[for="mail"]').css('color', 'red');
-      console.log('false email')
+      console.log('false email');
       return false;
     } else {
       $('#mail').css('border-color', '#b0d3e2');
       $('label[for="mail"]').css('color', 'black');
-      console.log('true email')
+      console.log('true email');
       return true;
     }
   }
@@ -200,18 +199,16 @@ $(document).ready(() => {
   function isActivitiesChecked(activity) {
     if (totalCost === 0) {
       $('.activities > legend').css('color', 'red');
-      console.log('activities false')
+      console.log('activities false');
       return false;
-    } else{
+    } else {
       $('.activities > legend').css('color', 'black');
-      console.log('activities true')
+      console.log('activities true');
       return true;
     }
-   
   }
 
   // $('.activities input').on('change', event => isActivitiesChecked(event.target.value));
-  
 
   function isValidCreditCard(number) {
     const creditNumRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
@@ -221,12 +218,12 @@ $(document).ready(() => {
     ) {
       $('#cc-num').css('border-color', 'red');
       $('label[for="cc-num"]').css('color', 'red');
-      console.log('credit num false')
+      console.log('credit num false');
       return false;
     } else {
       $('#cc-num').css('border-color', '#b0d3e2');
       $('label[for="cc-num"]').css('color', 'black');
-      console.log('activities true')
+      console.log('activities true');
       return true;
     }
   }
@@ -239,12 +236,12 @@ $(document).ready(() => {
     ) {
       $('#zip').css('border-color', 'red');
       $('label[for="zip"]').css('color', 'red');
-      console.log('zip false')
+      console.log('zip false');
       return false;
     } else {
       $('#zip').css('border-color', '#b0d3e2');
       $('label[for="zip"]').css('color', 'black');
-      console.log('zip true')
+      console.log('zip true');
       return true;
     }
   }
@@ -257,46 +254,49 @@ $(document).ready(() => {
     ) {
       $('#cvv').css('border-color', 'red');
       $('label[for="cvv"]').css('color', 'red');
-      console.log('cvv false')
+      console.log('cvv false');
       return false;
     } else {
       $('#cvv').css('border-color', '#b0d3e2');
       $('label[for="cvv"]').css('color', 'black');
-      console.log('cvv true')
+      console.log('cvv true');
       return true;
     }
   }
-  $('#name').on('input', event => isValidInputName(event.target.value));
-  $('#name').on('focusout', event => isValidInputName(event.target.value));
-  $('#mail').on('input', event => isValidEmail(event.target.value)); 
-  $('#mail').on('focusout', event => isValidEmail(event.target.value)); 
-  $('#cc-num').on('input', event => isValidCreditCard(event.target.value));
-  $('#cc-num').on('focusout', event => isValidCreditCard(event.target.value));
-  $('#cvv').on('input', event => isValidCVV(event.target.value)) ;
-  $('#cvv').on('focusout', event => isValidCVV(event.target.value));
-  $('#zip').on('input', event => isValidZip(event.target.value)); 
-  $('#zip').on('focusout', event => isValidZip(event.target.value));
 
-  function generalValidation() {
-    
-    if(isValidInputName() === true &&
-    isValidEmail() === true &&
-    isActivitiesChecked() === true &&
-    isValidCreditCard() === true &&
-    isValidCVV() === true &&
-    isValidZip() === true) {
-     console.log(true)
-      return true
+  function generalValidation(submit) {
+    if (
+      isValidInputName() === true &&
+      isValidEmail() === true &&
+      isActivitiesChecked() === true &&
+      $('#credit-card').show() &&
+      isValidCreditCard() === true &&
+      isValidCVV() === true &&
+      isValidZip() === true
+    ) {
+      console.log('general validation',true);
+      return true;
     } else {
-      console.log(false)
-      return false
+      console.log('general validation',false);
+      return false;
     }
     
-    
-     
   }
 
-  $('form').on('submit', generalValidation)
-  
- 
+  $('#name').on('input', event => isValidInputName(event.target.value));
+  $('#name').on('focusout', event => isValidInputName(event.target.value));
+  $('#mail').on('input', event => isValidEmail(event.target.value));
+  $('#mail').on('focusout', event => isValidEmail(event.target.value));
+  $('#cc-num').on('input', event => isValidCreditCard(event.target.value));
+  $('#cc-num').on('focusout', event => isValidCreditCard(event.target.value));
+  $('#cvv').on('input', event => isValidCVV(event.target.value));
+  $('#cvv').on('focusout', event => isValidCVV(event.target.value));
+  $('#zip').on('input', event => isValidZip(event.target.value));
+  $('#zip').on('focusout', event => isValidZip(event.target.value));
+  $('form').on('submit', event => generalValidation(event.target.value));
+
+  document.querySelector("form").addEventListener("submit", function(event) {
+    generalValidation(event.target.value)
+    event.preventDefault();
+}, false);
 });
