@@ -268,15 +268,23 @@ $(document).ready(() => {
     if (
       isValidInputName() === true &&
       isValidEmail() === true &&
-      isActivitiesChecked() === true &&
-      $('#credit-card').show() &&
-      isValidCreditCard() === true &&
-      isValidCVV() === true &&
-      isValidZip() === true
+      isActivitiesChecked() === true && 
+    ($('#credit-card').show() &&
+    isValidCreditCard() === true &&
+    isValidCVV() === true &&
+    isValidZip() === true)
+      
     ) {
       console.log('general validation',true);
       return true;
-    } else {
+    } else if( isValidInputName() === true &&
+    isValidEmail() === true &&
+    isActivitiesChecked() === true &&
+    ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin')
+    ) {
+      console.log('general validation with paypal/bitcoin',true);
+      return true
+    }else {
       console.log('general validation',false);
       return false;
     }
