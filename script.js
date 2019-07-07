@@ -188,7 +188,7 @@ $(document).ready(() => {
       $('label[for="mail"]').css('color', 'red');
       console.log('false email');
       return false;
-    } else {
+    } else if (emailRegex.test(email) || $('#mail').val() !== '') {
       $('#mail').css('border-color', '#b0d3e2');
       $('label[for="mail"]').css('color', 'black');
       console.log('true email');
@@ -266,29 +266,28 @@ $(document).ready(() => {
 
   function generalValidation(submit) {
     if (
-      isValidInputName() === true &&
-      isValidEmail() === true &&
-      isActivitiesChecked() === true && 
-    ($('#credit-card').show() &&
-    isValidCreditCard() === true &&
-    isValidCVV() === true &&
-    isValidZip() === true)
-      
+      isValidInputName(name) === true &&
+      isValidEmail(email) === true &&
+      isActivitiesChecked(activity) === true &&
+      ($('#payment').val() === 'credit card' &&
+        isValidCreditCard(num) === true &&
+        isValidCVV(num) === true &&
+        isValidZip(num) === true)
     ) {
-      console.log('general validation',true);
+      console.log('general validation', true);
       return true;
-    } else if( isValidInputName() === true &&
-    isValidEmail() === true &&
-    isActivitiesChecked() === true &&
-    ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin')
+    } else if (
+      isValidInputName(name) === true &&
+      isValidEmail(email) === true &&
+      isActivitiesChecked(activity) === true &&
+      ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin')
     ) {
-      console.log('general validation with paypal/bitcoin',true);
-      return true
-    }else {
-      console.log('general validation',false);
+      console.log('general validation with paypal/bitcoin', true);
+      return true;
+    } else {
+      console.log('general validation', false);
       return false;
     }
-    
   }
 
   $('#name').on('input', event => isValidInputName(event.target.value));
@@ -303,8 +302,12 @@ $(document).ready(() => {
   $('#zip').on('focusout', event => isValidZip(event.target.value));
   $('form').on('submit', event => generalValidation(event.target.value));
 
-  document.querySelector("form").addEventListener("submit", function(event) {
-    generalValidation(event.target.value)
-    event.preventDefault();
-}, false);
+  document.querySelector('form').addEventListener(
+    'submit',
+    function(event) {
+      generalValidation(event.target.value);
+      event.preventDefault();
+    },
+    false
+  );
 });
