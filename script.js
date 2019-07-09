@@ -264,16 +264,16 @@ $(document).ready(() => {
       return false;
     }
   }
-  $('#name').on('input', event => isValidInputName());
-  $('#name').on('focusout', event => isValidInputName());
-  $('#mail').on('input', event => isValidEmail());
-  $('#mail').on('focusout', event => isValidEmail());
-  $('.activities').on('change', event => isActivitiesChecked());
-  $('#cc-num').on('input', event => isValidCreditCard());
-  $('#cc-num').on('focusout', event => isValidCreditCard());
-  $('#cvv').on('input', event => isValidCVV());
-  $('#cvv').on('focusout', event => isValidCVV());
-  $('#zip').on('input', event => isValidZip());
-  $('#zip').on('focusout', event => isValidZip());
+  $('#name').on('input', event => isValidInputName(event));
+  $('#name').on('focusout', event =>  isValidInputName(event));
+  $('#mail').on('input', event =>  isValidEmail(event));
+  $('#mail').on('focusout', event =>  isValidEmail(event));
+  $('.activities').on('change', event =>  isActivitiesChecked(event));
+  $('#cc-num').on('input', event => isValidCreditCard(event));
+  $('#cc-num').on('focusout', event => isValidCreditCard(event));
+  $('#cvv').on('input', event => isValidCVV(event));
+  $('#cvv').on('focusout', event => isValidCVV(event));
+  $('#zip').on('input', event => isValidZip(event));
+  $('#zip').on('focusout', event => isValidZip(event));
   $('form').on('submit', event => generalValidation(event));
 });
