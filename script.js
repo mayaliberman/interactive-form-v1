@@ -128,186 +128,152 @@ $(document).ready(() => {
   });
 
   //payment section, if the credit card is chosen the details of credit card will be shown on the form
-  $('#payment')
-    .find('option:eq(0)')
-    .attr('disabled', true);
+
+  const payment = $('#payment');
+  const creditCard = $('#credit-card');
+  
+  payment.find('option:eq(0)').hide();
+  
   $('fieldset p').hide();
   //when selecting the payment method, the relevant fields or text will be shown.
-  $('#payment').change(function() {
-    $('#payment')
-      .find('option:eq(1)')
-      .attr('selected', true);
+  payment.change(function() {
+   
+    
     if ($(this).val() === 'credit card') {
-      $('#credit-card').show();
+      creditCard.show();
       $('fieldset p').hide();
-      $('#payment')
-        .find('option:eq(0)')
-        .hide();
     } else if ($(this).val() === 'paypal') {
-      $('#credit-card').hide();
+      creditCard.hide();
       $('p')
         .eq(1)
         .show();
       $('p')
         .eq(2)
         .hide();
-      $('#payment')
-        .find('option:eq(0)')
-        .hide();
+      payment.find('option:eq(0)').hide();
     } else if ($(this).val() === 'bitcoin') {
-      $('#credit-card').hide();
+      creditCard.hide();
       $('p')
         .eq(1)
         .hide();
       $('p')
         .eq(2)
         .show();
-      $('#payment')
-        .find('option:eq(0)')
-        .hide();
+      payment.find('option:eq(0)').hide();
     }
   });
-  //validation part, each section is being validated by a function
-  function isValidInputName(name) {
-    const nameRegex = /^[a-z][a-z '-.,]{0,31}$|^$/i;
-    if (!nameRegex.test(name) || $('#name').val() === '') {
-      $('#name').css('border-color', 'red');
-      $('label[for="name"]').css('color', 'red');
-      return false;
+
+  //**/VALIDATION**//
+
+  //validationInput takes each input and check if it is validate and also call the markField function
+  function validateInput(id, regex) {
+    const input = $(`#${id}`);
+    const value = input.val();
+
+    const label = $(`label[for="${id}"]`);
+
+    const isValid = value !== '' && regex.test(value);
+
+    markField(input, label, isValid);
+    return isValid;
+  }
+
+  //markField mark the field according to the boolean return
+  function markField(input, label, isValid) {
+    if (!isValid) {
+      input.css('border-color', 'red');
+      label.css('color', 'red');
     } else {
-      $('#name').css('border-color', '#b0d3e2');
-      $('label[for="name"]').css('color', 'black');
-      return true;
+      input.css('border-color', '#b0d3e2');
+      label.css('color', 'black');
     }
   }
+  //individual input fields send their id and regex to the validateInput function
+  function isValidInputName() {
+    const id = 'name';
+    const regex = /^[a-z][a-z '-.,]{0,31}$|^$/i;
 
-  function isValidEmail(email) {
-    const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    if (!emailRegex.test(email) || $('#mail').val() === '') {
-      $('#mail').css('border-color', 'red');
-      $('label[for="mail"]').css('color', 'red');
-      console.log('false email');
-      return false;
-    } else if (emailRegex.test(email) || $('#mail').val() !== '') {
-      $('#mail').css('border-color', '#b0d3e2');
-      $('label[for="mail"]').css('color', 'black');
-      console.log('true email');
-      return true;
-    }
+    return validateInput(id, regex);
   }
 
-  function isActivitiesChecked(activity) {
+  function isValidEmail() {
+    const id = 'mail';
+    const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+    return validateInput(id, regex);
+  }
+
+  function isActivitiesChecked() {
+    const label = $('.activities > legend');
+    const input = $('input [type="checkbox"]');
+    let isValid;
     if (totalCost === 0) {
-      $('.activities > legend').css('color', 'red');
-      console.log('activities false');
-      return false;
+      isValid = false;
     } else {
-      $('.activities > legend').css('color', 'black');
-      console.log('activities true');
-      return true;
+      isValid = true;
     }
+    markField(input, label, isValid);
+    return isValid;
   }
 
-  // $('.activities input').on('change', event => isActivitiesChecked(event.target.value));
+  function isValidCreditCard() {
+    const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+    const id = 'cc-num';
 
-  function isValidCreditCard(number) {
-    const creditNumRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-    if (
-      $('#credit-card').show() &&
-      (!creditNumRegex.test(number) || $('#cc-num').val() === '')
-    ) {
-      $('#cc-num').css('border-color', 'red');
-      $('label[for="cc-num"]').css('color', 'red');
-      console.log('credit num false');
-      return false;
-    } else {
-      $('#cc-num').css('border-color', '#b0d3e2');
-      $('label[for="cc-num"]').css('color', 'black');
-      console.log('activities true');
-      return true;
-    }
+    return validateInput(id, regex);
   }
 
-  function isValidZip(num) {
-    const zipRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
-    if (
-      $('#credit-card').show() &&
-      (!zipRegex.test(num) || $('#zip').val() === '')
-    ) {
-      $('#zip').css('border-color', 'red');
-      $('label[for="zip"]').css('color', 'red');
-      console.log('zip false');
-      return false;
-    } else {
-      $('#zip').css('border-color', '#b0d3e2');
-      $('label[for="zip"]').css('color', 'black');
-      console.log('zip true');
-      return true;
-    }
+  function isValidZip() {
+    const regex = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+    const id = 'zip';
+
+    return validateInput(id, regex);
   }
 
-  function isValidCVV(num) {
-    const CVVRegex = /^[0-9]{3,4}$/;
-    if (
-      $('#credit-card').show() &&
-      (!CVVRegex.test(num) || $('#cvv').val() === '')
-    ) {
-      $('#cvv').css('border-color', 'red');
-      $('label[for="cvv"]').css('color', 'red');
-      console.log('cvv false');
-      return false;
-    } else {
-      $('#cvv').css('border-color', '#b0d3e2');
-      $('label[for="cvv"]').css('color', 'black');
-      console.log('cvv true');
-      return true;
-    }
+  function isValidCVV() {
+    const regex = /^[0-9]{3,4}$/;
+    const id = 'cvv';
+
+    return validateInput(id, regex);
   }
 
-  function generalValidation(submit) {
+  //general validation function,that also takes into consideration which payment checkbox is chosen.
+
+  function generalValidation(event) {
+    // event.preventDefault();
     if (
-      isValidInputName(name) === true &&
-      isValidEmail(email) === true &&
-      isActivitiesChecked(activity) === true &&
-      ($('#payment').val() === 'credit card' &&
-        isValidCreditCard(num) === true &&
-        isValidCVV(num) === true &&
-        isValidZip(num) === true)
+      isValidInputName() === true &&
+      isValidEmail() === true &&
+      isActivitiesChecked() === true &&
+      (payment.val() === 'paypal' || payment.val() === 'bitcoin')
     ) {
-      console.log('general validation', true);
+      console.log(true);
       return true;
     } else if (
-      isValidInputName(name) === true &&
-      isValidEmail(email) === true &&
-      isActivitiesChecked(activity) === true &&
-      ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin')
+      isValidInputName() === true &&
+      isValidEmail() === true &&
+      isActivitiesChecked() === true &&
+      isValidCreditCard() === true &&
+      isValidZip() === true &&
+      isValidCVV() === true
     ) {
-      console.log('general validation with paypal/bitcoin', true);
+      console.log(true);
       return true;
     } else {
-      console.log('general validation', false);
+      console.log(false);
       return false;
     }
   }
-
-  $('#name').on('input', event => isValidInputName(event.target.value));
-  $('#name').on('focusout', event => isValidInputName(event.target.value));
-  $('#mail').on('input', event => isValidEmail(event.target.value));
-  $('#mail').on('focusout', event => isValidEmail(event.target.value));
-  $('#cc-num').on('input', event => isValidCreditCard(event.target.value));
-  $('#cc-num').on('focusout', event => isValidCreditCard(event.target.value));
-  $('#cvv').on('input', event => isValidCVV(event.target.value));
-  $('#cvv').on('focusout', event => isValidCVV(event.target.value));
-  $('#zip').on('input', event => isValidZip(event.target.value));
-  $('#zip').on('focusout', event => isValidZip(event.target.value));
-  $('form').on('submit', event => generalValidation(event.target.value));
-
-  document.querySelector('form').addEventListener(
-    'submit',
-    function(event) {
-      generalValidation(event.target.value);
-      event.preventDefault();
-    },
-    false
-  );
+  $('#name').on('input', event => isValidInputName());
+  $('#name').on('focusout', event => isValidInputName());
+  $('#mail').on('input', event => isValidEmail());
+  $('#mail').on('focusout', event => isValidEmail());
+  $('.activities').on('change', event => isActivitiesChecked());
+  $('#cc-num').on('input', event => isValidCreditCard());
+  $('#cc-num').on('focusout', event => isValidCreditCard());
+  $('#cvv').on('input', event => isValidCVV());
+  $('#cvv').on('focusout', event => isValidCVV());
+  $('#zip').on('input', event => isValidZip());
+  $('#zip').on('focusout', event => isValidZip());
+  $('form').on('submit', event => generalValidation(event));
 });
