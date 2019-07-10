@@ -131,33 +131,41 @@ $(document).ready(() => {
 
   const payment = $('#payment');
   const creditCard = $('#credit-card');
-  
+
   payment.find('option:eq(0)').hide();
-  
-  $('fieldset p').hide();
+
+  $('p')
+    .eq(2)
+    .hide();
+  $('p')
+    .eq(3)
+    .hide();
   //when selecting the payment method, the relevant fields or text will be shown.
   payment.change(function() {
-   
-    
     if ($(this).val() === 'credit card') {
       creditCard.show();
-      $('fieldset p').hide();
+      $('p')
+        .eq(2)
+        .hide();
+      $('p')
+        .eq(3)
+        .hide();
     } else if ($(this).val() === 'paypal') {
       creditCard.hide();
       $('p')
-        .eq(1)
+        .eq(2)
         .show();
       $('p')
-        .eq(2)
+        .eq(3)
         .hide();
       payment.find('option:eq(0)').hide();
     } else if ($(this).val() === 'bitcoin') {
       creditCard.hide();
       $('p')
-        .eq(1)
+        .eq(2)
         .hide();
       $('p')
-        .eq(2)
+        .eq(3)
         .show();
       payment.find('option:eq(0)').hide();
     }
@@ -183,7 +191,7 @@ $(document).ready(() => {
     const label = $(`label[for="${id}"]`);
     const isValid = value !== '' && regex.test(value);
     markField($(`#${id}`), label, isValid);
-    return (isValid ? true : false);
+    return isValid ? true : false;
   }
 
   function isValidEmail() {
@@ -193,45 +201,47 @@ $(document).ready(() => {
     const label = $(`label[for="${id}"]`);
     const isValid = value !== '' && regex.test(value);
     markField($(`#${id}`), label, isValid);
-    return (isValid ? true : false);
-    
+    return isValid ? true : false;
   }
 
   function isActivitiesChecked() {
-    
     const label = $('.activities > legend');
     const input = $('input [type="checkbox"]');
     let isValid = false;
     if (totalCost === 0) {
       isValid = false;
-      console.log('acitivities', isValid)
+      console.log('acitivities', isValid);
     } else {
       isValid = true;
-      console.log('acitivities', isValid)
+      console.log('acitivities', isValid);
     }
     markField(input, label, isValid);
     return isValid;
   }
 
-  
   function isValidCreditCard() {
     const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
     const id = 'cc-num';
     const value = $(`#${id}`).val();
     const label = $(`label[for="${id}"]`);
     const isValid = value !== '' && regex.test(value);
-    if($('#payment').val() !== 'credit card' || $('#payment').val() !== 'select_method') {
-      markField($(`#${id}`), label, isValid);
-      return true
+    if ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin') {
+      return true;
     } else if ($('#payment').val() === 'credit card' && isValid) {
       markField($(`#${id}`), label, isValid);
       return true;
     } else if ($('#payment').val() === 'credit card' && !isValid) {
       markField($(`#${id}`), label, isValid);
-     return false;
-    } else if($('#payment').val() === 'select_method') {
       return false;
-    }
+    } else if ($('#payment').val() === 'select_method' && !isValid) {
+      markField($(`#${id}`), label, isValid);
+      console.log('select method false')
+      return false;
+    } else if ($('#payment').val() === 'select_method' && isValid) {
+      markField($(`#${id}`), label, isValid);
+      console.log('select method false')
+      return true;
+    } 
   }
 
   function isValidZip() {
@@ -240,41 +250,48 @@ $(document).ready(() => {
     const value = $(`#${id}`).val();
     const label = $(`label[for="${id}"]`);
     const isValid = value !== '' && regex.test(value);
-    if($('#payment').val() !== 'credit card' || $('#payment').val() !== 'select_method') {
-      markField($(`#${id}`), label, isValid);
-      return true
+    if ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin') {
+      return true;
     } else if ($('#payment').val() === 'credit card' && isValid) {
       markField($(`#${id}`), label, isValid);
       return true;
     } else if ($('#payment').val() === 'credit card' && !isValid) {
       markField($(`#${id}`), label, isValid);
-     return false;
-    } else if($('#payment').val() === 'select_method') {
-      markField($(`#${id}`), label, isValid);
       return false;
-    }
-   
+    } else if ($('#payment').val() === 'select_method' && !isValid) {
+      markField($(`#${id}`), label, isValid);
+      console.log('select method false')
+      return false;
+    } else if ($('#payment').val() === 'select_method' && isValid) {
+      markField($(`#${id}`), label, isValid);
+      console.log('select method false')
+      return true;
+    } 
   }
 
   function isValidCVV() {
     const regex = /^[0-9]{3,4}$/;
     const id = 'cvv';
-    const value = $(`#${id}`).val(); 
+    const value = $(`#${id}`).val();
     const label = $(`label[for="${id}"]`);
     const isValid = value !== '' && regex.test(value);
-    if($('#payment').val() !== 'credit card' || $('#payment').val() !== 'select_method') {
-      markField($(`#${id}`), label, isValid);
-      return true
+    if ($('#payment').val() === 'paypal' || $('#payment').val() === 'bitcoin') {
+      return true;
     } else if ($('#payment').val() === 'credit card' && isValid) {
       markField($(`#${id}`), label, isValid);
       return true;
     } else if ($('#payment').val() === 'credit card' && !isValid) {
       markField($(`#${id}`), label, isValid);
-     return false;
-    } else if($('#payment').val() === 'select_method') {
-      markField($(`#${id}`), label, isValid);
       return false;
-    }
+    } else if ($('#payment').val() === 'select_method' && !isValid) {
+      markField($(`#${id}`), label, isValid);
+      console.log('select method false')
+      return false;
+    } else if ($('#payment').val() === 'select_method' && isValid) {
+      markField($(`#${id}`), label, isValid);
+      console.log('select method false')
+      return true;
+    } 
   }
 
   //general validation function,that also takes into consideration which payment checkbox is chosen.
@@ -287,37 +304,43 @@ $(document).ready(() => {
     isValidCreditCard();
     isValidCVV();
     isValidZip();
-    if(isValidInputName() === true && 
-    isValidEmail() === true &&
-    isActivitiesChecked() === true &&
-    isValidCreditCard() === true &&
-    isValidCVV() === true &&
-    isValidZip() === true) {
-            isValid = true;
+    if (
+      isValidInputName() === true &&
+      isValidEmail() === true &&
+      isActivitiesChecked() === true &&
+      isValidCreditCard() === true &&
+      isValidCVV() === true &&
+      isValidZip() === true
+    ) {
+      isValid = true;
     } else {
-           isValid = false;
-    };
-    
-    console.log(isValid)
-    return isValid
+      isValid = false;
+    }
+
+    console.log(isValid);
+    return isValid;
     
   }
   $('#name').on('input', event => isValidInputName(event));
-  $('#name').on('focusout', event =>  isValidInputName(event));
-  $('#mail').on('input', event =>  isValidEmail(event));
-  $('#mail').on('focusout', event =>  isValidEmail(event));
-  $('.activities').on('change', event =>  isActivitiesChecked(event));
+  $('#name').on('focusout', event => isValidInputName(event));
+  $('#mail').on('input', event => isValidEmail(event));
+  $('#mail').on('focusout', event => isValidEmail(event));
+  $('.activities').on('change', event => isActivitiesChecked(event));
   $('#cc-num').on('input', event => isValidCreditCard(event));
   $('#cc-num').on('focusout', event => isValidCreditCard(event));
   $('#cvv').on('input', event => isValidCVV(event));
   $('#cvv').on('focusout', event => isValidCVV(event));
   $('#zip').on('input', event => isValidZip(event));
   $('#zip').on('focusout', event => isValidZip(event));
-  $('form').submit(function( event ) {
-    if(generalValidation()) {
-      return 
-    }
-    event.preventDefault();
-  });
  
+  $('form').submit(function(event) {
+    if (!generalValidation()) {
+      event.preventDefault();
+      
+    }
+    else if (generalValidation()) {
+      console.log('submit done')
+      return;
+    }
+  });
 });
