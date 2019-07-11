@@ -73,7 +73,7 @@ $(document).ready(() => {
 
   //creating global variables to the activities section.
   let totalCost = 0;
-  const $totalActivityCost = $("<p id='total-cost'></p>").appendTo(
+  const $totalActivityCost = $("<h4 id='total-cost'></h4>").appendTo(
     '.activities'
   );
   const $activities = document.querySelector('.activities');
@@ -132,40 +132,37 @@ $(document).ready(() => {
   const payment = $('#payment');
   const creditCard = $('#credit-card');
 
-  payment.find('option:eq(0)').hide();
+  $('p').hide();
 
-  $('p')
-    .eq(2)
-    .hide();
-  $('p')
-    .eq(3)
-    .hide();
   //when selecting the payment method, the relevant fields or text will be shown.
+  // payment.click(function () {
+
+  $('#payment option:eq(1)').prop('selected', true);
+  $('#payment option:eq(0)').prop('disabled', true);
+
   payment.change(function() {
     if ($(this).val() === 'credit card') {
       creditCard.show();
-      $('p')
-        .eq(2)
-        .hide();
-      $('p')
-        .eq(3)
-        .hide();
+      payment.find('option:eq(0)').hide();
+      $('p').hide();
     } else if ($(this).val() === 'paypal') {
+      payment.find('option:eq(0)').hide();
       creditCard.hide();
       $('p')
-        .eq(2)
+        .eq(0)
         .show();
       $('p')
-        .eq(3)
+        .eq(1)
         .hide();
-      payment.find('option:eq(0)').hide();
     } else if ($(this).val() === 'bitcoin') {
+      payment.find('option:eq(0)').hide();
+      $('#payment option:eq(1)').prop('selected', false);
       creditCard.hide();
       $('p')
-        .eq(2)
+        .eq(0)
         .hide();
       $('p')
-        .eq(3)
+        .eq(1)
         .show();
       payment.find('option:eq(0)').hide();
     }
@@ -210,10 +207,8 @@ $(document).ready(() => {
     let isValid = false;
     if (totalCost === 0) {
       isValid = false;
-      console.log('acitivities', isValid);
     } else {
       isValid = true;
-      console.log('acitivities', isValid);
     }
     markField(input, label, isValid);
     return isValid;
@@ -235,13 +230,11 @@ $(document).ready(() => {
       return false;
     } else if ($('#payment').val() === 'select_method' && !isValid) {
       markField($(`#${id}`), label, isValid);
-      console.log('select method false')
       return false;
     } else if ($('#payment').val() === 'select_method' && isValid) {
       markField($(`#${id}`), label, isValid);
-      console.log('select method false')
       return true;
-    } 
+    }
   }
 
   function isValidZip() {
@@ -260,13 +253,11 @@ $(document).ready(() => {
       return false;
     } else if ($('#payment').val() === 'select_method' && !isValid) {
       markField($(`#${id}`), label, isValid);
-      console.log('select method false')
       return false;
     } else if ($('#payment').val() === 'select_method' && isValid) {
       markField($(`#${id}`), label, isValid);
-      console.log('select method false')
       return true;
-    } 
+    }
   }
 
   function isValidCVV() {
@@ -285,13 +276,11 @@ $(document).ready(() => {
       return false;
     } else if ($('#payment').val() === 'select_method' && !isValid) {
       markField($(`#${id}`), label, isValid);
-      console.log('select method false')
       return false;
     } else if ($('#payment').val() === 'select_method' && isValid) {
       markField($(`#${id}`), label, isValid);
-      console.log('select method false')
       return true;
-    } 
+    }
   }
 
   //general validation function,that also takes into consideration which payment checkbox is chosen.
@@ -316,10 +305,7 @@ $(document).ready(() => {
     } else {
       isValid = false;
     }
-
-    console.log(isValid);
     return isValid;
-    
   }
   $('#name').on('input', event => isValidInputName(event));
   $('#name').on('focusout', event => isValidInputName(event));
@@ -332,14 +318,11 @@ $(document).ready(() => {
   $('#cvv').on('focusout', event => isValidCVV(event));
   $('#zip').on('input', event => isValidZip(event));
   $('#zip').on('focusout', event => isValidZip(event));
- 
+
   $('form').submit(function(event) {
     if (!generalValidation()) {
       event.preventDefault();
-      
-    }
-    else if (generalValidation()) {
-      console.log('submit done')
+    } else if (generalValidation()) {
       return;
     }
   });
