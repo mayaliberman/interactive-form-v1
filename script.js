@@ -172,7 +172,7 @@ $(document).ready(() => {
 
   //markField mark the field according to the boolean return
   function markField(input, label, isValid) {
-    if (!isValid) {
+        if (!isValid) {
       input.css('border-color', 'red');
       label.css('color', 'red');
     } else {
